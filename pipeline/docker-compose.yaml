@@ -3,7 +3,7 @@ services:
   pgdatabase:
     image: postgres:18
     environment:
-      POSTGRES_USER: root
+      POSTGRES_USER: ${PGDATABASE_USER}
       POSTGRES_PASSWORD: ${PGDATABASE_PASSWORD}
       POSTGRES_DB: ny_taxi
     volumes:
@@ -14,7 +14,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     volumes:
       - pgadmin_data:/var/lib/pgadmin
@@ -58,7 +58,7 @@ services:
         kestra:
           server:
             basicAuth:
-              username: "admin@kestra.io" # it must be a valid email address
+              username: "${KESTRA_BASIC_AUTH_USERNAME}" # it must be a valid email address
               password: ${KESTRA_BASIC_AUTH_PASSWORD}
           repository:
             type: postgres
@@ -68,6 +68,11 @@ services:
               basePath: "/app/storage"
           queue:
             type: postgres
+          ai: 
+            type: gemini
+            gemini: 
+              model-name: gemini-3.7-flash
+              api-key: ${GEMINI_API_KEY}
           tasks:
             tmpDir:
               path: /tmp/kestra-wd/tmp
