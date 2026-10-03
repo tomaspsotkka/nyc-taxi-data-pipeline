@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: # adds a "Run workflow" button in the Actions tab
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - name: Ruff
+        working-directory: pipeline
+        run: uvx ruff@0.16.10 check .
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate docker-compose.yaml
+        working-directory: pipeline
+        run: docker compose --env-file .env.example config --quiet
+      - name: Build ingestion image
+        working-directory: pipeline
+        run: docker build -t taxi-ingest:ci .
+      - name: Check the image starts
+        run: docker run --rm taxi-ingest:ci --help
+
+  dbt:
+    name: dbt parse
+    runs-on: ubuntu-latest
+    env:
+      DBT_PROFILES_DIR: ${{ github.workspace }}/.github/dbt # dummy profile, no credentials
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - name: Parse dbt project
+        working-directory: taxi_dbt
+        run: uvx --from dbt-core==1.12.5 --with dbt-bigquery==1.12.1 dbt parse
