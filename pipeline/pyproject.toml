@@ -17,3 +17,9 @@ dev = [
     "jupyter>=1.1.1",
     "pgcli>=4.5.0",
 ]
+
+[tool.ruff]
+extend-exclude = ["*.ipynb"]  # notebooks are scratch work, cells often run out of order
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]  # syntax errors, undefined names, unused imports
