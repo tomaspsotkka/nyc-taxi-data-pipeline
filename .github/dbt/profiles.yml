@@ -1,0 +1,11 @@
+# Dummy profile for CI: `dbt parse` needs a valid profile but never connects,
+# so no credentials are required.
+taxi_dbt:
+  target: ci
+  outputs:
+    ci:
+      type: bigquery
+      method: oauth
+      project: ci-placeholder
+      dataset: ci
+      threads: 1
