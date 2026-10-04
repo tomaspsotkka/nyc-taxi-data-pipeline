@@ -8,3 +8,4 @@ sources:
     tables: 
       - name: yellow_tripdata_partitioned
       - name: green_tripdata_partitioned
+      - name: taxi_zone_lookup
