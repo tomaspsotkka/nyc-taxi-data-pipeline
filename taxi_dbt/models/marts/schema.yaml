@@ -1,0 +1,39 @@
+version: 2
+
+models:
+    - name: dim_vendors
+      description: >
+        One row per taxi technology vendor (the company whose system recorded the trip).
+        Built from the distinct vendor IDs in the combined yellow and green trip data,
+        with names added by the `get_vendor_names` macro.
+      columns:
+        - name: vendor_id
+          description: >
+            Code of the vendor that provided the trip record, as reported by the TLC.
+            Unique in this table; used to join trips to vendors.
+        - name: vendor_name
+          description: >
+            Name of the vendor: 1 = Creative Mobile Technologies, LLC; 2 = VeriFone Inc.;
+            4 = Unknown Vendor. Null for any vendor ID not mapped in the `get_vendor_names` macro.
+
+    - name: dim_zones
+      description: >
+        One row per NYC TLC taxi zone. Used to turn the pickup and dropoff location IDs
+        in the trip data into readable borough and zone names. Source: the TLC taxi
+        zone lookup table, loaded from Postgres into BigQuery by Kestra.
+      columns:
+        - name: location_id
+          description: >
+            TLC taxi zone ID. Unique in this table; matches `pickup_location_id` and
+            `dropoff_location_id` in the trip data.
+        - name: borough
+          description: >
+            NYC borough the zone belongs to (Manhattan, Brooklyn, Queens, Bronx,
+            Staten Island), or EWR for Newark Airport and Unknown for unassigned IDs.
+        - name: zone
+          description: Name of the taxi zone, e.g. "JFK Airport" or "Upper East Side North".
+        - name: service_zone
+          description: >
+            TLC service area of the zone: Yellow Zone (where yellow taxis may pick up
+            street hails), Boro Zone (where green taxis may), Airports, or EWR.
+            Empty for the Unknown zones.

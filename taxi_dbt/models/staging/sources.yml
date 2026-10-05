@@ -7,5 +7,18 @@ sources:
     schema: zoomcamp
     tables: 
       - name: yellow_tripdata_partitioned
+        description: Raw yellow taxi trip data
       - name: green_tripdata_partitioned
+        description: Raw green taxi trip data
+        columns: 
+          - name: vendorid
+            description: A code indicating the provider associated with the trip record
+            data_type: integer
+            config:
+              meta:
+                pii: false
+                ownership: data_team
+                importance: high
+                formatting: none
       - name: taxi_zone_lookup
+        description: Zones lookup table
