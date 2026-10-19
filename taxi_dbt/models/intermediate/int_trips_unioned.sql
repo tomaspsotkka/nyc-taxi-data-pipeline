@@ -7,9 +7,9 @@ yellow_tripdata as (
 ),
 
 trips_unioned as (
-    select * from green_tripdata
+    select *, 'green' as service_type from green_tripdata
     union all
-    select * from yellow_tripdata
+    select *, 'yellow' as service_type from yellow_tripdata
 )
 
 select * from trips_unioned

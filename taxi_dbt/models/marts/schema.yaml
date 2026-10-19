@@ -37,3 +37,24 @@ models:
             TLC service area of the zone: Yellow Zone (where yellow taxis may pick up
             street hails), Boro Zone (where green taxis may), Airports, or EWR.
             Empty for the Unknown zones.
+
+    - name: fct_trips
+      description: >
+        One row per taxi trip, yellow and green combined. The raw data contains the same
+        trip more than once, so rows are combined when vendor, service type, pickup and
+        dropoff time, pickup and dropoff zone, passenger count and trip distance all match.
+        Exact copies are removed. Refunds (the same trip again with negative amounts) are
+        added to the original trip, so refunded trips have a total of 0. See the
+        taxi_dbt README for the full explanation.
+      columns:
+        - name: service_type
+          description: Whether the trip was made by a yellow or a green taxi ('yellow' or 'green').
+        - name: payment_type
+          description: >
+            How the trip was paid: 1 = Credit card, 2 = Cash, 3 = No charge, 4 = Dispute,
+            5 = Unknown, 6 = Voided trip. For refunded trips this is the reason for the
+            refund (usually 3 or 4).
+        - name: total_amount
+          description: >
+            Total amount charged, with refunds already subtracted. 0 for fully refunded
+            trips. Negative for refunds whose original trip is not in the loaded data.
