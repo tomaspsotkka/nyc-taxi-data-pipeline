@@ -55,6 +55,22 @@ combined as (
         dropoff_location_id,
         passenger_count,
         trip_distance
+),
+
+with_trip_id as (
+    select
+        to_hex(md5(concat(
+            coalesce(cast(vendor_id as string), ''), '|',
+            coalesce(cast(service_type as string), ''), '|',
+            coalesce(cast(pickup_datetime as string), ''), '|',
+            coalesce(cast(dropoff_datetime as string), ''), '|',
+            coalesce(cast(pickup_location_id as string), ''), '|',
+            coalesce(cast(dropoff_location_id as string), ''), '|',
+            coalesce(cast(passenger_count as string), ''), '|',
+            coalesce(cast(trip_distance as string), '')
+        ))) as trip_id,
+        *
+    from combined
 )
 
-select * from combined
+select * from with_trip_id

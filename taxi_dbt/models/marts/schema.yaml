@@ -47,6 +47,14 @@ models:
         added to the original trip, so refunded trips have a total of 0. See the
         taxi_dbt README for the full explanation.
       columns:
+        - name: trip_id
+          description: >
+            Unique id of the trip. A hash of the columns that identify a trip:
+            vendor, service type, pickup and dropoff time, pickup and dropoff zone, passenger count
+            and trip distance.
+          data_tests: 
+            - unique
+            - not_null 
         - name: service_type
           description: Whether the trip was made by a yellow or a green taxi ('yellow' or 'green').
         - name: payment_type
