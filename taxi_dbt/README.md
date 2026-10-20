@@ -27,6 +27,7 @@ marts          Final tables for analysis: trips, zones, vendors
 | marts | `fct_trips` | One row per trip, with duplicates removed (see below) |
 | marts | `dim_zones` | One row per taxi zone, with borough and zone name |
 | marts | `dim_vendors` | One row per vendor, with the company name |
+| seed | `payment_type_lookup` | Names for the payment type codes (1 = Credit card, 2 = Cash, …), used by `fct_trips` |
 
 ## Duplicate trips in `fct_trips`
 
@@ -65,11 +66,6 @@ Before cleaning there were 29,434,964 rows. After cleaning there are 29,388,009 
   that is not loaded. They are kept, because they are real refunds.
 - Total revenue is the same before and after cleaning, apart from the exact copies, which were counted
   twice before.
-
-## Still to do
-
-- Add a unique `trip_id` to `fct_trips`
-- Add readable names for `payment_type` (for example "Credit card" instead of 1)
 
 ## Running the project
 

@@ -59,4 +59,14 @@ select
     countif(total_amount = 0) as zero_total_trips,
     countif(total_amount < 0) as negative_trips,
     round(sum(total_amount), 2) as total_revenue
+from {{ ref('fct_trips') }};
+
+select 
+    payment_type,
+    payment_type_description,
+    count(*) as trips
 from {{ ref('fct_trips') }}
+group by payment_type, payment_type_description
+order by payment_type
+
+select count(*) from {{ ref('fct_trips') }}

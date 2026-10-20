@@ -1,13 +1,9 @@
-/*
-To Do:
-- One row per trip (doesn't matter if yellow or green)
-- Add a primary key (trip_id). It has to be unique.
-- Find all the duplicates, understand why they happen, and fix them,
-- Find a way to enrich the column payment_type.
-*/
-
 with trips as (
     select * from {{ ref('int_trips_unioned') }}
+),
+
+payment_types as (
+    select * from {{ ref('payment_type_lookup') }}
 ),
 
 distinct_rows as (
@@ -73,4 +69,9 @@ with_trip_id as (
     from combined
 )
 
-select * from with_trip_id
+select 
+    t.*,
+    coalesce(p.description, 'Unknown') as payment_type_description
+from with_trip_id as t
+left join payment_types as p
+    on t.payment_type = p.payment_type

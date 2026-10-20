@@ -62,6 +62,9 @@ models:
             How the trip was paid: 1 = Credit card, 2 = Cash, 3 = No charge, 4 = Dispute,
             5 = Unknown, 6 = Voided trip. For refunded trips this is the reason for the
             refund (usually 3 or 4).
+        - name: payment_type_description
+          description: Readable name of the payment type, from the payment_type_lookup seed. 'Unknown' if the code is not in the lookup.
+
         - name: total_amount
           description: >
             Total amount charged, with refunds already subtracted. 0 for fully refunded
